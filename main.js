@@ -1,19 +1,69 @@
+const parseMetadata = metadata => {
+    const { dimensions: dimensionsMap, mainStructureMembers: measuresMap } = metadata
+    const dimensions = []
+    for (const key in dimensionsMap) {
+      const dimension = dimensionsMap[key]
+      dimensions.push({ key, ...dimension })
+    }
+    const measures = []
+    for (const key in measuresMap) {
+      const measure = measuresMap[key]
+      measures.push({ key, ...measure })
+    }
+    return { dimensions, measures, dimensionsMap, measuresMap }
+  }
+
+
 (function() { 
 	let template = document.createElement("template");
 	template.innerHTML = `
-	<div id="PrimaryValueBox" style="width: 100%; height: 100%;">
-		<h2 id="PrimaryValueTitle">This is heading 2</h2>
-		<h2 id="PrimaryValue">This is heading 2</h2>
-    </div>
-		<style>
-		{
-			border-radius: 5px;
-			border-width: 2px;
-			border-color: black;
-			border-style: solid;
-			display: block;
-		} 
-		</style> 
+	<div class="row" id="Tile" style="width: 500px; height: 100px;">
+   <div <h2 class="column" id="Column1"> </h2></div>
+   <div id="Column2"> 
+   <h2 class="column" id="TileHeading >This is measure heading</h2>
+   <h2 class="column" >This is measure value</h2>
+   </div> 
+    <div id="Column3"> 
+   </div> 
+    
+   
+</div>
+
+<style>
+    #Tile {
+        border-style: solid;
+        border-radius: 5px;
+        border: 2px solid black;
+    }
+
+    #Column1 {
+        float: left;
+        top: 0px;
+        width: 3%;
+        height: 100%;
+        border-color: black;
+        border-top-left-radius: 3px;
+        border-bottom-left-radius: 3px;
+        background-color: blue;
+    }
+
+    #Column2 {
+        float: left;
+        width: 50%;
+        height: 100%;
+        border-color: black;
+        background-color: red;
+        
+    }
+     #Column3 {
+        float: right;
+        width: 47%;
+        height: 100%;
+        border-color: black;
+        background-color: yellow;
+        
+    }
+</style>
 	
 	`;
 
@@ -27,6 +77,7 @@
 				this.dispatchEvent(event);
 			});
 			this._props = {};
+			this.render()
 		}
 
 		onCustomWidgetBeforeUpdate(changedProperties) {
@@ -41,6 +92,70 @@
 				this.style["opacity"] = changedProperties["opacity"];
 			}
 		}
+
+		async render () {
+			const dataBinding = this.dataBinding
+			if (!dataBinding || dataBinding.state !== 'success') { return }
+	  
+			const { data, metadata } = dataBinding
+			const { dimensions, measures } = parseMetadata(metadata)
+			// dimension
+			const categoryData = []
+	  
+			// measures
+			const series = measures.map(measure => {
+			  return {
+				data: [],
+				key: measure.key,
+				type: 'line',
+				smooth: true
+			  }
+			})
+	  
+			data.forEach(row => {
+			  // dimension
+			  categoryData.push(dimensions.map(dimension => {
+				return row[dimension.key].label
+			  }).join('/'))
+			  // measures
+			  series.forEach(series => {
+				series.data.push(row[series.key].raw)
+			  })
+			 ;
+			})
+	  
+			//console.log("hello world ");
+			//console.log(series);
+			//console.log(measures);
+			//console.log(categoryData);
+			//document.getElementById("TileHeading").innerHTML = measures[0]
+			
+			// const myChart = echarts.init(this._root, 'main')
+			// const option = {
+			//   xAxis: {
+			// 	type: 'category',
+			// 	data: categoryData
+			//   },
+			//   yAxis: {
+			// 	type: 'value'
+			//   },
+			//   tooltip: {
+			// 	trigger: 'axis'
+			//   },
+			//   series: [
+			// 	{
+			// 	  lineStyle: {
+			// 	  width: 7
+			// 	  },
+			// 	  type: 'line',
+			// 	  color: '#0FAAFF',
+			// 	  symbolSize:10,
+			// 	  smooth: true
+			// 	}
+			//   ]
+			// }
+			// myChart.setOption(option)
+		  }
 	}
 
 	customElements.define("com-sap-sample-kpi-tile", KPItile);
