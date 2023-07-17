@@ -129,7 +129,7 @@ const parseMetadata = metadata => {
 			//console.log(measures);
 			//console.log(categoryData);
 			//document.getElementById("TileHeading").innerHTML = measures[0]
-			
+			//
 			// const myChart = echarts.init(this._root, 'main')
 			// const option = {
 			//   xAxis: {
