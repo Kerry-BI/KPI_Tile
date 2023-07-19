@@ -23,11 +23,11 @@ const parseMetadata = metadata => {
 (function() { 
 	const template = document.createElement('template')
 	template.innerHTML = `
-	<div class="row" id="Tile" style="width: 500px; height: 100px;">
+	<div class="row" id="Tile" style="width: 200px; height: 70px;">
    <div <h2 class="column" id="Column1"> </h2></div>
    <div id="Column2"> 
-   <h2 id="TileHeading>This is measure heading</h2>
-   <h2 class="column" >This is measure value</h2>
+   <p1 id="Tilevalue" style="padding: 0px 15px 8px 8px">measure Name</p1>
+   <p1 id="TileHeading" style="padding: 0px 15px 8px 8px">measure value</p1>
    </div> 
     <div id="Column3"> 
    </div> 
@@ -190,15 +190,15 @@ const parseMetadata = metadata => {
 			  console.log("l7");
 			  console.log((transformedData[0].measure));
 			  console.log("l8");
-			  console.log(this._shadowRoot.getElementById('TileHeading').innerHTML);
+			 // console.log(this._shadowRoot.getElementsByClassName("head1")[0].innerHTML = "Goodbye");
 			  console.log("l9");
-			  this._shadowRoot.getElementById('TileHeading').innerHTML = "transformedData[0].measure";
-			  //this._root.innerHTML = transformedData[0].measure;
+			  this._root.textContent = transformedData[0].measure;
+			  //this._root = transformedData[0].measure;
+			  console.log(metadata);
+			  console.log(mainStructureMembers);
 
-			  console.log(this._myDataSource.data[0][0]);
 
-
-			this._echart = echarts.init(this._root, 'wight')
+			//this._echart = echarts.init(this._root, 'wight')
 	  
 			// const option = {
 			//   series: [
