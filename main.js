@@ -1,3 +1,9 @@
+var getScriptPromisify = (src) => {
+	return new Promise((resolve) => {
+	  $.getScript(src, resolve)
+	})
+  }
+
 const parseMetadata = metadata => {
     const { dimensions: dimensionsMap, mainStructureMembers: measuresMap } = metadata
     const dimensions = []
@@ -94,6 +100,18 @@ const parseMetadata = metadata => {
 		}
 
 		async render () {
+
+			const resultSet = this.myDataBinding
+            console.log(resultSet)
+            const data1 = resultSet.data
+            console.log(data1)
+            const descriptionDimension = resultSet.metadata.dimensions.dimensions_0.description
+            console.log(descriptionDimension)
+            const lableMeasures = resultSet.metadata.mainStructureMembers.measures_0.label
+            console.log(lableMeasures)
+            const dataBinding2 = this.dataBindings.getDataBinding('DataBinding')
+            console.log(dataBinding2)
+
 			const dataBinding = this.dataBinding
 			if (!dataBinding || dataBinding.state !== 'success') { return }
 	  

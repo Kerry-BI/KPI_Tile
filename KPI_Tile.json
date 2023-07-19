@@ -11,7 +11,7 @@
 		{
 			"kind": "main",
 			"tag": "com-sap-sample-kpi-tile",
-			"url": "/main.js",
+			"url": "/main2.js",
 			"integrity": "",
 			"ignoreIntegrity": true
 		}
@@ -60,7 +60,7 @@
 		}
 	},    
 	"dataBindings": {
-		"dataBinding": {
+		"myDataSource": {
 		  "feeds": [
 			{
 			  "id": "dimensions",
