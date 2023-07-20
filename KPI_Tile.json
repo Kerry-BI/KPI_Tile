@@ -29,11 +29,11 @@
 		},
 		"width": {
 			"type": "integer",
-			"default": 100
+			"default": 230
 		},
 		"height": {
 			"type": "integer",
-			"default": 100
+			"default": 70
 		}
 	},
 	"methods": {

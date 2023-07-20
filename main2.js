@@ -23,11 +23,11 @@ const parseMetadata = metadata => {
 (function() { 
 	const template = document.createElement('template')
 	template.innerHTML = `
-	<div class="row" id="Tile" style="width: 200px; height: 70px;">
+	<div class="row" id="Tile" style="width: 230px; height: 70px;">
    <div <h2 class="column" id="Column1"> </h2></div>
    <div id="Column2"> 
    <p1 id="Tilevalue" style="padding: 0px 15px 8px 8px">measure Name</p1>
-   <p1 id="TileHeading" style="padding: 0px 15px 8px 8px">measure value</p1>
+   <p1 id="TileHeading" style="padding: 0px 15px 8px 8px"><b>measure value</b></p1>
    </div> 
     <div id="Column3"> 
    </div> 
@@ -38,8 +38,8 @@ const parseMetadata = metadata => {
 	<style>
     #Tile {
         border-style: solid;
-        border-radius: 5px;
-        border: 2px solid black;
+        border-radius: 3px;
+        border: 1px solid black;
     }
 
     #Column1 {
@@ -48,9 +48,9 @@ const parseMetadata = metadata => {
         width: 3%;
         height: 100%;
         border-color: black;
-        border-top-left-radius: 3px;
-        border-bottom-left-radius: 3px;
-        background-color: blue;
+        border-top-left-radius: 1px;
+        border-bottom-left-radius: 1px;
+        background-color: #005776;
     }
 
     #Column2 {
@@ -58,7 +58,7 @@ const parseMetadata = metadata => {
         width: 50%;
         height: 100%;
         border-color: black;
-        background-color: red;
+        background-color: #E6EEF1;
         
     }
      #Column3 {
@@ -66,7 +66,7 @@ const parseMetadata = metadata => {
         width: 47%;
         height: 100%;
         border-color: black;
-        background-color: yellow;
+        background-color: #E6EEF1;
         
     }
 	</style>
@@ -79,6 +79,8 @@ const parseMetadata = metadata => {
 			this._shadowRoot = this.attachShadow({mode: 'open'});
 			this._shadowRoot.appendChild(template.content.cloneNode(true));
 			console.log("example");
+			this._root3 = this._shadowRoot.getElementById('Column3');
+			this._root2 = this._shadowRoot.getElementById('Tilevalue');
 			this._root = this._shadowRoot.getElementById('TileHeading');
 
 			this.addEventListener("click", event => {
@@ -149,11 +151,13 @@ const parseMetadata = metadata => {
 
 			async render () {
 			console.log("example start render");
-			await getScriptPromisify("https://cdn.staticfile.org/echarts/5.3.0/echarts.min.js");
+			await getScriptPromisify(
+				'https://cdn.staticfile.org/echarts/5.0.0/echarts.min.js'
+			  );
 			console.log("l1");
-			this.dispose()
+			this.dispose();
 			console.log("l2");
-			console.log(this._myDataSource.state);
+			//console.log(this._myDataSource.state);
 			console.log(this._myDataSource);
 			if (!this._myDataSource || this._myDataSource.state !== 'success') {
 			  return
@@ -193,77 +197,65 @@ const parseMetadata = metadata => {
 			 // console.log(this._shadowRoot.getElementsByClassName("head1")[0].innerHTML = "Goodbye");
 			  console.log("l9");
 			  this._root.textContent = transformedData[0].measure;
+			  this._root2.textContent = metadata.mainStructureMembers.measures_0.label;
 			  //this._root = transformedData[0].measure;
-			  console.log(metadata);
-			  console.log(mainStructureMembers);
+			  console.log(metadata.mainStructureMembers.measures_0.label);
+			  
 
 
 			//this._echart = echarts.init(this._root, 'wight')
 	  
-			// const option = {
-			//   series: [
-			// 	{
-			// 	  type: 'gauge',
-			// 	  data: measures.map((measure, i) => {
-			// 		return {
-			// 		  value: data[0][measure.key].raw,
-			// 		  //name: measure.label,
-			// 		  // title: {
-			// 		  //   offsetCenter: ['-0%', `${-35 + i * 30}%`]
-			// 		  // },
-			// 		  detail: {
-			// 			valueAnimation: true,
-			// 			offsetCenter: ['0%', `0%`]
-			// 		  }
-			// 		}
-			// 	  }),
-			// 	  startAngle: 90,
-			// 	  endAngle: -270,
-			// 	  pointer: {
-			// 		show: false
-			// 	  },
-			// 	  progress: {
-			// 		show: true,
-			// 		overlap: false,
-			// 		roundCap: false,
-			// 		clip: false,
-			// 		itemStyle: {
-			// 		  borderWidth: 1,
-			// 		  color:'#348B26',
-			// 		  borderColor: '#348B26'
-			// 		}
-			// 	  },
-			// 	  axisLine: {
-			// 		lineStyle: {
-			// 		  width:25
-			// 		}
-			// 	  },
-			// 	  splitLine: {
-			// 		show: false,
-			// 		distance: 0,
-			// 		length: 10
-			// 	  },
-			// 	  axisTick: {
-			// 		show: false
-			// 	  },
-			// 	  axisLabel: {
-			// 		show: false,
-			// 		distance: 50
-			// 	  },
-			// 	  title: {
-			// 		fontSize: 14
-			// 	  },
-			// 	  detail: {
-			// 		width: 50,
-			// 		height: 14,
-			// 		fontSize: 36,
-			// 		color:'#999999',
-			// 		formatter: '{value}%'
-			// 	  }
-			// 	}
-			//   ]
-			// }
-			//this._echart.setOption(option)
+			// dimension
+			const categoryData = []
+
+			// measures
+			const series = measures.map(measure => {
+			  return {
+				data: [],
+				key: measure.key,
+				type: 'line',
+				smooth: true
+			  }
+			})
+
+			data.forEach(row => {
+				// dimension
+				categoryData.push(dimensions.map(dimension => {
+				  return row[dimension.key].label
+				}).join('/'))
+				// measures
+				series.forEach(series => {
+				  series.data.push(row[series.key].raw)
+				})
+			  })
+
+			  const myChart = echarts.init(this._root3, 'main')
+      const option = {
+        xAxis: {
+          type: 'category',
+          data: categoryData
+        },
+        yAxis: {
+          type: 'value',
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        series: [
+          {
+            lineStyle: {
+            width: 7
+            },
+            type: 'line',
+            color: '#0FAAFF',
+            symbolSize:10,
+            smooth: true
+          }
+        ]
+      }
+      myChart.setOption(option)
+
+
 		  }
 	  
 		  dispose () {
