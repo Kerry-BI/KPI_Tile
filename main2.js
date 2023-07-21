@@ -194,16 +194,13 @@ const parseMetadata = metadata => {
 			  console.log("l7");
 			  console.log((transformedData[0].measure));
 			  console.log("l8");
-			 // console.log(this._shadowRoot.getElementsByClassName("head1")[0].innerHTML = "Goodbye");
+			//console.log(this._shadowRoot.getElementsByClassName("head1")[0].innerHTML = "Goodbye");
 			  console.log("l9");
 			  this._root.textContent = transformedData[0].measure;
 			  this._root2.textContent = metadata.mainStructureMembers.measures_0.label;
 			  //this._root = transformedData[0].measure;
 			  console.log(metadata.mainStructureMembers.measures_0.label);
 			  
-
-
-			//this._echart = echarts.init(this._root, 'wight')
 	  
 			// dimension
 			const categoryData = []
@@ -217,6 +214,8 @@ const parseMetadata = metadata => {
 				smooth: true
 			  }
 			})
+			
+			
 
 			data.forEach(row => {
 				// dimension
@@ -228,15 +227,21 @@ const parseMetadata = metadata => {
 				  series.data.push(row[series.key].raw)
 				})
 			  })
+			  console.log("l10");
+			  console.log(series);
+			  console.log("l11");
+			  console.log(categoryData);
 
-			  const myChart = echarts.init(this._root3, 'main')
+			  const myChart = echarts.init(this._root3)
       const option = {
         xAxis: {
           type: 'category',
-          data: categoryData
+          data: categoryData,
+		  show: false
         },
         yAxis: {
           type: 'value',
+		  show: false
         },
         tooltip: {
           trigger: 'axis'
@@ -244,12 +249,14 @@ const parseMetadata = metadata => {
         series: [
           {
             lineStyle: {
-            width: 7
+            width: .8
             },
+			data: series[0].data,
             type: 'line',
             color: '#0FAAFF',
-            symbolSize:10,
+            symbolSize:1,
             smooth: true
+			
           }
         ]
       }
