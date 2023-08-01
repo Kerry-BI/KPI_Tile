@@ -14,26 +14,44 @@
 			"url": "/main2.js",
 			"integrity": "",
 			"ignoreIntegrity": true
-		}
+		},
+		{
+			"kind": "styling",
+			"tag": "com-sap-sample-kpi-tile-style",
+			"url": "/styling.js",
+			"integrity": "",
+			"ignoreIntegrity": true
+			}
+		
 	],
 	"properties": {
 		"color": {
 			"type": "string",
 			"description": "Background color",
-			"default": "white"
+			"default": "#ffffff"
 		},
-		"opacity": {
-			"type": "number",
-			"description": "Opacity",
-			"default": 1
+		"decimals": {
+			"type": "integer",
+			"description": "decimal places",
+			"default": 0
+		},
+		"ValueFontSize": {
+			"type": "integer",
+			"description": "font size of the value text",
+			"default": 0
+		},
+		"scaling": {
+			"type": "string",
+			"description": "Scaling",
+			"default": "000"
 		},
 		"width": {
 			"type": "integer",
-			"default": 230
+			"default": 231
 		},
 		"height": {
 			"type": "integer",
-			"default": 70
+			"default": 71
 		}
 	},
 	"methods": {
@@ -52,6 +70,54 @@
 			"returnType": "string",
 			"description": "Returns the background color.",
 			"body": "return this.color;"
+		},
+		"setDecimal": {
+			"description": "Sets the number of decimal places after value.",
+			"parameters": [
+				{
+					"name": "newDecimal",
+					"type": "integer",
+					"description": "The new scale value"
+				}
+			],
+			"body": "this.decimals = newDecimal;"
+		},
+		"getDecimal": {
+			"returnType": "integer",
+			"description": "Returns the value for the decimal places.",
+			"body": "return this.decimals;"
+		},
+		"setValueFontSize": {
+			"description": "Sets the font size of the value.",
+			"parameters": [
+				{
+					"name": "newValueFontSize",
+					"type": "integer",
+					"description": "The new value font size value"
+				}
+			],
+			"body": "this.ValueFontSize = newValueFontSize;"
+		},
+		"getValueFontSize": {
+			"returnType": "integer",
+			"description": "Returns the value for the decimal places.",
+			"body": "return this.ValueFontSize;"
+		},
+		"setScaling": {
+			"description": "Sets the scaling factor.",
+			"parameters": [
+				{
+					"name": "newScaling",
+					"type": "string",
+					"description": "The new scaling factor"
+				}
+			],
+			"body": "this.scaling = newScaling;"
+		},
+		"getScaling": {
+			"returnType": "string",
+			"description": "Returns the scaling factor.",
+			"body": "return this.scaling;"
 		}
 	},
 	"events": {
