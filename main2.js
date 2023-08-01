@@ -23,19 +23,26 @@ const parseMetadata = metadata => {
 (function() { 
 	const template = document.createElement('template')
 	template.innerHTML = `
-	<div class="row" id="Tile" style="width: 230px; height: 70px;">
+	<div class="row" id="Tile" style="width: 99%; height: 95%;">
    <div <h2 class="column" id="Column1"> </h2></div>
    <div id="Column2"> 
    <p1 id="Tilevalue" style="padding: 0px 15px 8px 8px">measure Name</p1>
    <p1 id="TileHeading" style="padding: 0px 15px 8px 8px"><b>measure value</b></p1>
    </div> 
-    <div id="Column3"> 
+    <div id="Column3" style="padding: 5px 0px 5px 0px"> 
    </div> 
     
    
 	</div>
 
 	<style>
+
+	p {
+		line-height: normal;
+		display: inline-block;
+		vertical-align: middle;
+	  }
+
     #Tile {
         border-style: solid;
         border-radius: 3px;
@@ -54,11 +61,13 @@ const parseMetadata = metadata => {
     }
 
     #Column2 {
+		align-items: center;
         float: left;
+		text-align: center;
         width: 50%;
         height: 100%;
         border-color: black;
-        background-color: #E6EEF1;
+        background-color: #ffffff;
         
     }
      #Column3 {
@@ -66,14 +75,19 @@ const parseMetadata = metadata => {
         width: 47%;
         height: 100%;
         border-color: black;
-        background-color: #E6EEF1;
+        background-color: #ffffff;
         
     }
 	</style>
 	
 	`;
 
+	var scaleval= "000";
+	var decimal = 0;
+
 	class KPItile extends HTMLElement {
+
+
 		constructor() {
 			super(); 
 			this._shadowRoot = this.attachShadow({mode: 'open'});
@@ -82,6 +96,9 @@ const parseMetadata = metadata => {
 			this._root3 = this._shadowRoot.getElementById('Column3');
 			this._root2 = this._shadowRoot.getElementById('Tilevalue');
 			this._root = this._shadowRoot.getElementById('TileHeading');
+			this._col2style = this._shadowRoot.getElementById('Column2');
+			this._col3style = this._shadowRoot.getElementById('Column3');
+			
 
 			this.addEventListener("click", event => {
 				var event = new Event("onClick");
@@ -89,14 +106,14 @@ const parseMetadata = metadata => {
 			});
 			this._props = {};
 			console.log("example render");
-			this.render()
+			this.render(scaleval);
 			}
 
 			set myDataSource (dataBinding) {
 				console.log("example data render");
 				this._myDataSource = dataBinding
 			
-				this.render()
+				this.render(scaleval)
 		  	}
 
 			onCustomWidgetBeforeUpdate(changedProperties) {
@@ -105,11 +122,18 @@ const parseMetadata = metadata => {
 
 			onCustomWidgetAfterUpdate(changedProperties) {
 			if ("color" in changedProperties) {
-				this.style["background-color"] = changedProperties["color"];
+				this._col2style.style["background-color"] = changedProperties["color"];
+				this._col3style.style["background-color"] = changedProperties["color"];
 			}
-			if ("opacity" in changedProperties) {
-				this.style["opacity"] = changedProperties["opacity"];
+			if ("scaling" in changedProperties) {
+				//this.style["scaling"] = changedProperties["scaling"];
+				this._updateScaling(changedProperties.scaling);
 			}
+
+			if ("decimals" in changedProperties) {
+				this._updateDecimals(changedProperties.decimals);
+			}
+
 			
 			if ("myDataSource" in changedProperties) {
 					this._updateData(changedProperties.myDataSource);
@@ -117,6 +141,36 @@ const parseMetadata = metadata => {
 			
 			}
 
+			_updateScaling(scale) {
+				console.log(scale);
+				scaleval = scale
+				this.render();
+				// const sign = Math.sign(Number(transformedData[0].measure));
+				// switch(scale){
+				// 	case "Whole":
+				// 		this._root.textContent = transformedData[0].measure;
+				// 		break;
+				// 	case "M":
+				// 		this._root.textContent = sign * (Math.abs(Number(transformedData[0].measure)) / 1.0e6) + "M"
+				// 		break;
+				// 	case "000":
+				// 		this._root.textContent = sign * (Math.abs(Number(transformedData[0].measure)) / 1.0e3) + "K"
+				// 		break;
+
+				// }
+				console.log(scale);
+			}
+
+			_updateDecimals(decimalnum) {
+				console.log(decimalnum);
+				decimal = decimalnum
+				this.render();
+			}
+
+			onCustomWidgetResize (width, height) {
+				this.render(scaleval)
+			  }
+			
 			_updateData(dataBinding) {
 				console.log('dataBinding:', dataBinding);
 				if (!dataBinding) {
@@ -191,12 +245,31 @@ const parseMetadata = metadata => {
 			})
 			  console.log("l6");
 			  console.log(transformedData);
+
+			  var total=0;
+			for(var i=0; i<transformedData.length; i++){
+				total = total+transformedData[i].measure
+			}
+			console.log(total);
 			  console.log("l7");
 			  console.log((transformedData[0].measure));
 			  console.log("l8");
 			//console.log(this._shadowRoot.getElementsByClassName("head1")[0].innerHTML = "Goodbye");
 			  console.log("l9");
-			  this._root.textContent = transformedData[0].measure;
+			  const sign = Math.sign(Number(total));
+				switch(scaleval){
+					case "Whole":
+						this._root.innerHTML = "<b>"+total+"</b>";
+						break;
+					case "M":
+						this._root.innerHTML = "<b>"+sign * (Math.abs(Number(total)) / 1.0e6) + "M"+"</b>"
+						break;
+					case "000":
+						this._root.innerHTML = "<b>"+sign * (Math.abs(Number(total)) / 1.0e3) + "K"+"</b>";
+						break;
+
+				}
+			 //this._root.innerHTML = "<b>"+total+"</b>";
 			  this._root2.textContent = metadata.mainStructureMembers.measures_0.label;
 			  //this._root = transformedData[0].measure;
 			  console.log(metadata.mainStructureMembers.measures_0.label);
@@ -227,6 +300,7 @@ const parseMetadata = metadata => {
 				  series.data.push(row[series.key].raw)
 				})
 			  })
+			  
 			  console.log("l10");
 			  console.log(series);
 			  console.log("l11");
@@ -237,7 +311,8 @@ const parseMetadata = metadata => {
         xAxis: {
           type: 'category',
           data: categoryData,
-		  show: false
+		  show: false,
+		  boundaryGap: false
         },
         yAxis: {
           type: 'value',
@@ -249,13 +324,29 @@ const parseMetadata = metadata => {
         series: [
           {
             lineStyle: {
-            width: .8
+			color: '#005776',
+            width: 2
             },
 			data: series[0].data,
             type: 'line',
-            color: '#0FAAFF',
+			color: {
+				type: 'linear',
+				x: 0,
+				y: 0,
+				x2: 0,
+				y2: 1,
+				colorStops: [{
+				  offset: 0, color: '#3d88ff' // color at 0%
+				}, {
+				  offset: 1, color: 'white' // color at 100%
+				}],
+				global: false // default is false
+			  },
             symbolSize:1,
+			areaStyle: {},
+			showSymbol: false,
             smooth: true
+
 			
           }
         ]

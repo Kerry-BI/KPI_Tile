@@ -1,9 +1,9 @@
 (function()  {
 	let template = document.createElement("template");
 	template.innerHTML = `
-		<form id="form">
+		<form id="form_color">
 			<fieldset>
-				<legend>Colored Box Properties</legend>
+			<legend>KPI Tile Properties</legend>
 				<table>
 					<tr>
 						<td>Color</td>
@@ -11,24 +11,84 @@
 					</tr>
 				</table>
 				<input type="submit" style="display:none;">
-			</fieldset>
+		</fieldset>
+		</form>
+		<form id="form_scale">
+		<fieldset>
+		<legend>KPI Tile Properties</legend>
+		<label for="membership">Scaling Value:</label>
+			<select name="scale_value" id="scale_value">
+  				<option value="000">000's</option>
+  				<option value="Whole">Whole</option>
+  				<option value="M" selected>M's</option>
+			</select>
+		</fieldset>
+		</form>
+		<form id="form_value_text_size">
+		<fieldset>
+		<legend>KPI Tile Properties</legend>
+		<table>
+					<tr>
+						<td> ValueText Size</td>
+						<td><input id="text_size" type="text" size="40" maxlength="40"></td>
+					</tr>
+				</table>
+				<input type="submit" style="display:none;">
+		</fieldset>
+		</form>
+		<form id="form_decimal_place">
+		<fieldset>
+		<legend>KPI Tile Properties</legend>
+		<table>
+					<tr>
+						<td>Text Size</td>
+						<td><input id="text_size" type="text" size="40" maxlength="40"></td>
+					</tr>
+				</table>
+				<input type="submit" style="display:none;">
+		</fieldset>
 		</form>
 	`;
 
-	class ColoredBoxStylingPanel extends HTMLElement {
+	class KPIStylePanel extends HTMLElement {
 		constructor() {
 			super();
 			this._shadowRoot = this.attachShadow({mode: "open"});
 			this._shadowRoot.appendChild(template.content.cloneNode(true));
-			this._shadowRoot.getElementById("form").addEventListener("submit", this._submit.bind(this));
+			this._shadowRoot.getElementById("form_color").addEventListener("submit", this._submitcolor.bind(this));
+			this._shadowRoot.getElementById("form_decimal_place").addEventListener("submit", this._submitdecimalplace.bind(this));
+			this._shadowRoot.getElementById("scale_value").addEventListener("click",this._shadowRoot.getElementById("scale_value").addEventListener("change", this._submitscale.bind(this)));
 		}
 
-		_submit(e) {
+		_submitcolor(e) {
 			e.preventDefault();
 			this.dispatchEvent(new CustomEvent("propertiesChanged", {
 					detail: {
 						properties: {
 							color: this.color
+						}
+					}
+			}));
+		}
+
+		_submitdecimalplace(e) {
+			e.preventDefault();
+			this.dispatchEvent(new CustomEvent("propertiesChanged", {
+					detail: {
+						properties: {
+							decimals: this.decimals
+						}
+					}
+			}));
+		}
+
+		_submitscale(e) {
+			console.log(e);
+			e.preventDefault();
+			this.dispatchEvent(new CustomEvent("propertiesChanged", {
+					detail: {
+						properties: {
+							scaling: this.scaling
 						}
 					}
 			}));
@@ -41,7 +101,24 @@
 		get color() {
 			return this._shadowRoot.getElementById("styling_color").value;
 		}
+
+		set scaling(newScaling) {
+			this._shadowRoot.getElementById("scale_value").value = newScaling;
+		}
+
+		get scaling() {
+			return this._shadowRoot.getElementById("scale_value").value;
+		}
+
+		set decimals(newDecimal) {
+			this._shadowRoot.getElementById("form_decimal_place").value = newDecimal;
+		}
+
+		get decimals() {
+			return this._shadowRoot.getElementById("form_decimal_place").value;
+		}
+
 	}
 
-customElements.define("com-sap-sample-coloredbox-styling", ColoredBoxStylingPanel);
+customElements.define("com-sap-sample-kpi-tile-style", KPIStylePanel);
 })();
