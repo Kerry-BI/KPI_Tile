@@ -2,9 +2,9 @@
 	"id": "KPI.Tile",
 	"version": "1.0.0",
 	"name": "KPI Tile",
-	"description": "A standard KPI tile",
+	"description": "A standard KPI tile with chart",
 	"newInstancePrefix": "KPItile",
-	"vendor": "SAP",
+	"vendor": "Danny Brassil",
 	"eula": "",
 	"license": "",
 	"webcomponents": [
@@ -28,7 +28,7 @@
 		"color": {
 			"type": "string",
 			"description": "Background color",
-			"default": "#ffffff"
+			"default": "white"
 		},
 		"decimals": {
 			"type": "integer",
@@ -38,7 +38,7 @@
 		"ValueFontSize": {
 			"type": "integer",
 			"description": "font size of the value text",
-			"default": 0
+			"default": 15
 		},
 		"scaling": {
 			"type": "string",

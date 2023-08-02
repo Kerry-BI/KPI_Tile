@@ -29,7 +29,7 @@ const parseMetadata = metadata => {
    <p1 id="Tilevalue" style="padding: 0px 15px 8px 8px">measure Name</p1>
    <p1 id="TileHeading" style="padding: 0px 15px 8px 8px"><b>measure value</b></p1>
    </div> 
-    <div id="Column3" style="padding: 5px 0px 5px 0px"> 
+    <div id="Column3" style="padding: 0px 0px 0px 0px"> 
    </div> 
     
    
@@ -67,7 +67,7 @@ const parseMetadata = metadata => {
         width: 50%;
         height: 100%;
         border-color: black;
-        background-color: #ffffff;
+        background-color: white !important;
         
     }
      #Column3 {
@@ -75,7 +75,7 @@ const parseMetadata = metadata => {
         width: 47%;
         height: 100%;
         border-color: black;
-        background-color: #ffffff;
+        background-color: white !important;
         
     }
 	</style>
@@ -84,6 +84,7 @@ const parseMetadata = metadata => {
 
 	var scaleval= "000";
 	var decimal = 0;
+	var fontValue=15;
 
 	class KPItile extends HTMLElement {
 
@@ -106,7 +107,7 @@ const parseMetadata = metadata => {
 			});
 			this._props = {};
 			console.log("example render");
-			this.render(scaleval);
+			this.render();
 			}
 
 			set myDataSource (dataBinding) {
@@ -128,9 +129,17 @@ const parseMetadata = metadata => {
 			if ("scaling" in changedProperties) {
 				//this.style["scaling"] = changedProperties["scaling"];
 				this._updateScaling(changedProperties.scaling);
+				
+			}
+
+			if ("ValueFontSize" in changedProperties) {
+				//this.style["scaling"] = changedProperties["scaling"];
+				this._updateValueFontSize(changedProperties.ValueFontSize);
+				
 			}
 
 			if ("decimals" in changedProperties) {
+				console.log(changedProperties.decimals)
 				this._updateDecimals(changedProperties.decimals);
 			}
 
@@ -162,13 +171,21 @@ const parseMetadata = metadata => {
 			}
 
 			_updateDecimals(decimalnum) {
+				console.log("decimalnum;");
 				console.log(decimalnum);
 				decimal = decimalnum
 				this.render();
 			}
 
+			_updateValueFontSize(ValueFontSize) {
+				console.log("ValueFontSize;");
+				console.log(ValueFontSize);
+				fontValue = ValueFontSize
+				this.render();
+			}
+
 			onCustomWidgetResize (width, height) {
-				this.render(scaleval)
+				this.render()
 			  }
 			
 			_updateData(dataBinding) {
@@ -257,18 +274,21 @@ const parseMetadata = metadata => {
 			//console.log(this._shadowRoot.getElementsByClassName("head1")[0].innerHTML = "Goodbye");
 			  console.log("l9");
 			  const sign = Math.sign(Number(total));
-				switch(scaleval){
-					case "Whole":
-						this._root.innerHTML = "<b>"+total+"</b>";
-						break;
-					case "M":
-						this._root.innerHTML = "<b>"+sign * (Math.abs(Number(total)) / 1.0e6) + "M"+"</b>"
-						break;
-					case "000":
+			  console.log("scle _ val" );
+			  console.log(scaleval );
+				if(scaleval="Whole"){
+						this._root.innerHTML = "<b>"+Number(Math.round(total+'e'+decimal)+'e-'+decimal)+"</b>";
+						
+				}else if(scaleval="M"){
+						this._root.innerHTML = "<b>"+Number(Math.round(sign * (Math.abs(Number(total)) / 1.0e6)+'e'+decimal)+'e-'+decimal) + "M"+"</b>"
+						
+				}else if(scaleval="000"){
 						this._root.innerHTML = "<b>"+sign * (Math.abs(Number(total)) / 1.0e3) + "K"+"</b>";
-						break;
-
+						
 				}
+
+				
+				this._root.style.fontSize = fontValue+"px";
 			 //this._root.innerHTML = "<b>"+total+"</b>";
 			  this._root2.textContent = metadata.mainStructureMembers.measures_0.label;
 			  //this._root = transformedData[0].measure;
@@ -308,6 +328,8 @@ const parseMetadata = metadata => {
 
 			  const myChart = echarts.init(this._root3)
       const option = {
+		responsive: true,
+		maintainAspectRatio: false,
         xAxis: {
           type: 'category',
           data: categoryData,
