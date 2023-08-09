@@ -22,6 +22,7 @@
   				<option value="Whole">Whole</option>
   				<option value="M" >M's</option>
 				<option value="example" >example</option>
+				<option value="example2" >example2</option>
 			</select>
 		</fieldset>
 		</form>
