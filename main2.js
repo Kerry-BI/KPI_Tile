@@ -26,7 +26,8 @@ const parseMetadata = metadata => {
 	<div class="row" id="Tile" style="width: 99%; height: 95%;">
    <div <h2 class="column" id="Column1"> </h2></div>
    <div id="Column2"> 
-   <p1 id="Tilevalue" style="padding: 0px 15px 8px 8px">measure Name</p1>
+   <p1> </p1>
+   <p1 id="Tilevalue" style="padding: 0px 15px 8px 8px" ><br>measure Name</p1>
    <p1 id="TileHeading" style="padding: 0px 15px 8px 8px"><b>measure value</b></p1>
    </div> 
     <div id="Column3" style="padding: 0px 0px 0px 0px"> 
@@ -327,7 +328,7 @@ const parseMetadata = metadata => {
 			  console.log(categoryData);
 
 			  const myChart = echarts.init(this._root3)
-      const option = {
+      	const option = {
 		responsive: true,
 		maintainAspectRatio: false,
         xAxis: {
@@ -367,7 +368,8 @@ const parseMetadata = metadata => {
             symbolSize:1,
 			areaStyle: {},
 			showSymbol: false,
-            smooth: true
+            smooth: true,
+			animation: false
 
 			
           }

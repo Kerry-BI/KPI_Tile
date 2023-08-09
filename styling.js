@@ -3,7 +3,7 @@
 	template.innerHTML = `
 		<form id="form_color">
 			<fieldset>
-			<legend>KPI Tile Properties</legend>
+			<legend>KPI Tile Properties example </legend>
 				<table>
 					<tr>
 						<td>Color</td>

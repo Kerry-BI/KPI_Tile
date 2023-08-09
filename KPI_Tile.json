@@ -11,14 +11,14 @@
 		{
 			"kind": "main",
 			"tag": "com-sap-sample-kpi-tile",
-			"url": "/main2.js",
+			"url": "https://kerry-bi.github.io/KPI_Tile/main2.js",
 			"integrity": "",
 			"ignoreIntegrity": true
 		},
 		{
 			"kind": "styling",
 			"tag": "com-sap-sample-kpi-tile-style",
-			"url": "/styling.js",
+			"url": "https://kerry-bi.github.io/KPI_Tile/styling.js",
 			"integrity": "",
 			"ignoreIntegrity": true
 			}
