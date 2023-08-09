@@ -21,6 +21,7 @@
   				<option value="000" selected>000's</option>
   				<option value="Whole">Whole</option>
   				<option value="M" >M's</option>
+				<option value="example" >example</option>
 			</select>
 		</fieldset>
 		</form>
