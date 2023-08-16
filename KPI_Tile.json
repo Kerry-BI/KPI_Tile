@@ -11,14 +11,14 @@
 		{
 			"kind": "main",
 			"tag": "com-sap-sample-kpi-tile",
-			"url": "https://kerry-bi.github.io/KPI_Tile/main2.js",
+			"url": "/main2.js",
 			"integrity": "",
 			"ignoreIntegrity": true
 		},
 		{
 			"kind": "styling",
 			"tag": "com-sap-sample-kpi-tile-style",
-			"url": "https://kerry-bi.github.io/KPI_Tile/styling.js",
+			"url": "/styling.js",
 			"integrity": "",
 			"ignoreIntegrity": true
 			}
@@ -40,10 +40,30 @@
 			"description": "font size of the value text",
 			"default": 15
 		},
+		"LabelFontSize": {
+			"type": "integer",
+			"description": "font size of the label text",
+			"default": 15
+		},
 		"scaling": {
 			"type": "string",
 			"description": "Scaling",
 			"default": "000"
+		},
+		"lineOption": {
+			"type": "string",
+			"description": "Option to make chart line straight or curved",
+			"default": "Curve"
+		},
+		"showxAxis": {
+			"type": "string",
+			"description": "Option to hide or show x axis",
+			"default": "false"
+		},
+		"showyAxis": {
+			"type": "string",
+			"description": "Option to hide or show y axis",
+			"default": "false"
 		},
 		"width": {
 			"type": "integer",
@@ -100,8 +120,24 @@
 		},
 		"getValueFontSize": {
 			"returnType": "integer",
-			"description": "Returns the value for the decimal places.",
+			"description": "Returns the value for the value font size.",
 			"body": "return this.ValueFontSize;"
+		},
+		"setLabelFontSize": {
+			"description": "Sets the font size of the Label.",
+			"parameters": [
+				{
+					"name": "newLabelFontSize",
+					"type": "integer",
+					"description": "The new value font size value"
+				}
+			],
+			"body": "this.LabelFontSize = newLabelFontSize;"
+		},
+		"getLabelFontSize": {
+			"returnType": "integer",
+			"description": "Returns the value for the label font size.",
+			"body": "return this.LabelFontSize;"
 		},
 		"setScaling": {
 			"description": "Sets the scaling factor.",
@@ -118,8 +154,58 @@
 			"returnType": "string",
 			"description": "Returns the scaling factor.",
 			"body": "return this.scaling;"
-		}
+		},
+	
+	"setlineOption": {
+		"description": "Sets the line Option.",
+		"parameters": [
+			{
+				"name": "newlineOption",
+				"type": "string",
+				"description": "The new line Option"
+			}
+		],
+		"body": "this.lineOption = newlineOption;"
 	},
+	"getlineOption": {
+		"returnType": "string",
+		"description": "Returns the line Option.",
+		"body": "return this.showxAxis;"
+	},
+
+	"setxAxis": {
+		"description": "Shows or hides the x axis.",
+		"parameters": [
+			{
+				"name": "newshowxAxis",
+				"type": "string",
+				"description": "true/false if the the x axis is shown "
+			}
+		],
+		"body": "this.showxAxis = newshowxAxis;"
+	},
+	"getxAxis": {
+		"returnType": "string",
+		"description": "Returns the Option that Shows or hides the x axis.",
+		"body": "return this.showxAxis;"
+	},
+	"setyAxis": {
+		"description": "Shows or hides the y axis.",
+		"parameters": [
+			{
+				"name": "newshowyAxis",
+				"type": "string",
+				"description": "true/false if the the y axis is shown "
+			}
+		],
+		"body": "this.showyAxis = newshowyAxis;"
+	},
+	"getyAxis": {
+		"returnType": "string",
+		"description": "Returns the Option that Shows or hides the y axis.",
+		"body": "return this.showyAxis;"
+	}
+},
 	"events": {
 		"onClick": {
 			"description": "Called when the user clicks."
